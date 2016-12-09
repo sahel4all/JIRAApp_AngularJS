@@ -1,0 +1,89 @@
+<div class="container" style="margin-bottom: 10px;" >
+
+</div>
+<div class="container" style="margin-bottom: 10px;" >
+
+</div>
+<div class="container" style="margin-bottom: 10px;" >
+
+</div>
+<div class="container" style="margin-bottom: 10px;" >
+
+</div>
+<div class="container" style="margin-bottom: 10px;" >
+
+</div>
+<div class="container" style="margin-bottom: 10px;" >
+
+</div>
+<div class="container" style="margin-bottom: 10px;" >
+
+</div>
+
+<div class="container" style="margin-bottom: 10px;" >
+
+</div>
+<div class="container" style="margin-bottom: 10px;" >
+
+</div>
+<div class="container" style="margin-bottom: 10px;" >
+
+</div>
+<div class="container" style="margin-bottom: 10px;" >
+
+</div>
+<div class="container" style="margin-bottom: 10px;" >
+
+</div>
+<div class="container" style="margin-bottom: 10px;" >
+
+</div>
+
+<div class="container">
+    <section style="margin: 50px">
+
+        <div class="col-lg-1">
+            <div class="carosel" id="carosel2">
+                <form class="form-horizontal" name="billForm">
+                    <table class="table table-striped table-bordered " style="white-space: nowrap">
+                        <thead>
+                        <tr>
+                            <th>DES Track</th>
+                            <th>InProgress</th>
+                            <th>Assigned</th>
+                            <th>Ready For Lead Testing</th>
+                            <th>Return to Testing</th>
+                            <th>Development Complete</th>
+                            <th>New</th>
+                            <th>5 Critical</th>
+                            <th>4 Disabled no-workaround</th>
+                            <th>3 Disabled workaround</th>
+                            <th>2 Minor non-critical</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="defect in defects">
+                            <td><a href="#/reports/{{defect.track}}">{{defect.track}}</a></td>
+                            <!--<td><a href="#/reports">{{defect.track}}</a></td>-->
+                            <!--<td>{{defect.noOfInProgressDefects}}</td>-->
+                            <td><a href="#/reports/{{defect.track}}/Status/In Progress">{{defect.noOfInProgressDefects}}</a></td>
+                            <td><a href="#/reports/{{defect.track}}/Status/Assigned">{{defect.noOfAssignedDefects}}</a></td>
+                            <td><a href="#/reports/{{defect.track}}/Status/Ready For Lead Testing">{{defect.noOfRLTDefects}}</a></td>
+                            <td><a href="#/reports/{{defect.track}}/Status/Return to Testing">{{defect.noOfRTTDefects}}</a></td>
+                            <!--<td>{{defect.noOfDevCompleteDefects}}</td>-->
+                            <td><a href="#/reports/{{defect.track}}/Status/Development Complete">{{defect.noOfInProgressDefects}}</a></td>
+                            <td><a href="#/reports/{{defect.track}}/Status/New">{{defect.noOfNewDefects}}</a></td>
+                            <td><a href="#/reports/{{defect.track}}/Defect Severity/5">{{defect.sev5Defects}}</a></td>
+                            <td><a href="#/reports/{{defect.track}}/Defect Severity/4">{{defect.sev4Defects}}</a> </td>
+                            <td><a href="#/reports/{{defect.track}}/Defect Severity/3">{{defect.sev3Defects}}</a></td>
+                            <td><a href="#/reports/{{defect.track}}/Defect Severity/2">{{defect.sev2Defects}}</a> </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+
+    </section>
+</div>

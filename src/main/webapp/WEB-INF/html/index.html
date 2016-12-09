@@ -1,0 +1,49 @@
+<html lang="en" ng-app="JIRARptApp">
+<head>
+   <link rel="stylesheet" href="resources/bower_components/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<style type="text/css">
+   body { background: floralwhite !important;
+      font-family: 'Oswald', sans-serif;}
+</style>
+<body >
+<nav class="navbar navbar-inverse navbar-fixed-top" id="JIRAApp-header">
+   <div class="container">
+      <a href="#"><p style="text-align:center"><b>JIRA Reporting Management System</b></p></a>
+   </div>
+   <div class="container">
+      <a href="#"><p style="text-align:center">Automated JIRA Dashboards </p></a>
+   </div>
+   <div class="container">
+      <ul class="nav navbar-nav navbar-left">
+         <li><a href="#/statistics">Get track wise counts</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+         <li>
+            <a ng-click="showDetails = ! showDetails" href="#/refreshDashboard">Refresh Dashboard</a>
+            <!--<a href="#" ng-click="showDetails = ! showDetails">Refresh Dashboard</a></h4>-->
+         </li>
+      </ul>
+   </div>
+
+   <div ng-show="showDetails" >
+      <p style="text-align:center"><font color="red">Please refresh your JIRA dashboards after approx 90 secs</font> </p>
+   </div>
+   <!--<div class="col-xs-offset-5 col-xs-2 text-center">-->
+      <!--<a href="#/reports">Home</a>-->
+   <!--</div>-->
+
+</nav>
+
+<script src="resources/bower_components/angular/angular.min.js"></script>
+<script src="resources/bower_components/angular-animate/angular-animate.min.js"></script>
+<script src="resources/bower_components/angular-aria/angular-aria.min.js"></script>
+<script src="resources/bower_components/angular-messages/angular-messages.min.js"></script>
+<script src="resources/bower_components/angular/angular-material.min.js"></script>
+<script src="resources/app/js/app.js"></script>
+<script src="resources/bower_components/angular-route/angular-route.min.js"></script>
+<script src="resources/app/js/controllers/DataController.js"></script>
+<script src="resources/app/js/controllers/StatsController.js"></script>
+<ng-view > </ng-view>
+</body>
+</html>

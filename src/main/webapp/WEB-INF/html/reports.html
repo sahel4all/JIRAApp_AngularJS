@@ -1,0 +1,67 @@
+<div class="container" style="margin-bottom: 10px;" >
+
+</div>
+<div class="container" style="margin-bottom: 10px;" >
+
+</div>
+<div class="container" style="margin-bottom: 10px;" >
+
+</div>
+<div class="container" style="margin-bottom: 10px;" >
+
+</div>
+<div class="container" style="margin-bottom: 10px;" >
+
+</div>
+<div class="container" style="margin-bottom: 10px;" >
+
+</div>
+<div class="container" style="margin-bottom: 10px;" >
+
+</div>
+<div class="container" style="margin-bottom: 10px;" >
+
+</div>
+
+
+<div class="container">
+    <div class="col-md-2 pull-right"><a href="#/statistics">Get track wise counts</a></div>
+    <div class="col-md-2 pull-left"><a href="#">Refresh Dashboard</a></div>
+    <section style="margin: 50px">
+        <span class="row">Enter your filter criteria <input type="text" ng-model="searchKey" placeholder="JIRA ID or Track"/></span>
+        <div></div>
+        <div class="col-lg-1">
+            <div class="carosel" id="carosel2">
+                <form class="form-horizontal" name="billForm">
+                    <table class="table table-striped table-bordered " style="white-space: nowrap">
+                        <thead>
+                        <tr>
+                            <th>DES Track</th>
+                            <th>JIRA Id</th>
+                            <th>RTC-Id</th>
+                            <th>Status</th>
+                            <th>Internal Review Status (per item)</th>
+                            <th>Assignee</th>
+                            <th>Defect Severity</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="item in jsonArray|searchFilter:searchKey">
+                            <td>{{item['DES Track']}}</td>
+                            <td><a href="http://10.118.9.117:8080/browse/{{item.Key}}" target="_blank">{{item.Key}}</a></td>
+                            <td>{{item['RTC-ID']}}</td>
+                            <td>{{item.Status}}</td>
+                            <td>{{item['Internal Review Status']}}</td>
+                            <td>{{item.Assignee}}</td>
+                            <td>{{item['Defect Severity']}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </section>
+
+
+
+</div>
