@@ -16,4 +16,7 @@ public class LayoutController {
     @RequestMapping("statistics")
     public String getSummaryLayoutPage(){return "statistics";}
 
+    @RequestMapping("assignment")
+    public String getAssignmentListLayoutPage(){return "assignment";}
+
 }

@@ -23,10 +23,6 @@ var DataController= function ($scope,$http,$routeParams) {
             $scope.jsonArray = response;
         });
     }
-    $scope.logout = function()
-    {
-        alert("hii");
-    }
     // $http.get('jsonData').success(function (response) {
     //     $scope.jsonArray = response;
     // });

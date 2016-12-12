@@ -26,6 +26,14 @@ mainApp.config(['$routeProvider','$httpProvider', function ($routeProvider, $htt
         templateUrl:'reports',
         controller:DataController
     }).
+    when('/assignment',{
+        templateUrl:'assignment',
+        controller:AssignmentController
+    }).
+    when('/assignment/:track',{
+        templateUrl:'reports',
+        controller:AssignmentController
+    }).
     otherwise('/BMS');
 }]).filter('searchFilter',function () {
     return function (arr,key) {

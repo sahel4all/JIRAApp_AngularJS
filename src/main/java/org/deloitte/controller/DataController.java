@@ -11,12 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-/**
- * Created by msahel on 8/7/2016.
- */
+import java.util.StringTokenizer;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -28,6 +26,8 @@ public class DataController {
 
     @Value("${jsonPath}")
     private String jsonPath;
+    @Value("${iedssJsonPath}")
+    private String iedssJsonPath;
     /**
      * Logger for this class.
      */
@@ -65,15 +65,28 @@ public class DataController {
 
     @RequestMapping(value="/jsonData/{track}",method = RequestMethod.GET)
     public ResponseEntity getJSONDataTrackWise(@PathVariable("track") final String trackName){
-        System.out.println("getJSONDataTrackWise:");
-        JSONParser parser = new JSONParser();
-        Object obj = null;
-        String appName="";
-        appName=getApplicationTrackName(trackName);
-
+        System.out.println("get JSONDataTrackWise:");
+        JSONArray jsonObjectCopy = new JSONArray();
+        jsonObjectCopy=getJSONArray(iedssJsonPath,trackName);
         System.out.println("trackName:"+trackName);
+        return new ResponseEntity(jsonObjectCopy, HttpStatus.OK);
+    }
+
+    @RequestMapping(value="/iedssJsonData/{track}",method = RequestMethod.GET)
+    public ResponseEntity getIEDSSJSONDataTrackWise(@PathVariable("track") final String trackName){
+        System.out.println("getIEDSSJSONDataTrackWise:");
+        JSONArray jsonObjectCopy = new JSONArray();
+        jsonObjectCopy=getDataByCriteria(iedssJsonPath,trackName,"Status","New-Triaged");
+        System.out.println("trackName:"+trackName);
+        return new ResponseEntity(jsonObjectCopy, HttpStatus.OK);
+    }
+
+    private JSONArray getJSONArray(String filePath, String trackName){
+        String appName=getApplicationTrackName(trackName);
+        Object obj = null;
+        JSONParser parser = new JSONParser();
         try {
-            obj = parser.parse(new FileReader(jsonPath));
+            obj = parser.parse(new FileReader(filePath));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -101,13 +114,18 @@ public class DataController {
             }
 
         }
+        return jsonObjectCopy;
+    }
+    @RequestMapping(value="/jsonData/{track}/{fieldIndicator}/{criteria}",method = RequestMethod.GET)
+    public ResponseEntity getJSONDataByCriteria(@PathVariable("track") final String trackName,@PathVariable("fieldIndicator") final String fieldIndicator,
+                                                @PathVariable("criteria") String criteria){
+        System.out.println("getJSONDataByCriteria:");
+        JSONArray jsonObjectCopy = new JSONArray();
+        jsonObjectCopy=getDataByCriteria(jsonPath,trackName,fieldIndicator,criteria);
         return new ResponseEntity(jsonObjectCopy, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/jsonData/{track}/{fieldIndicator}/{criteria}",method = RequestMethod.GET)
-    public ResponseEntity getJSONDataByCriteria(@PathVariable("track") final String trackName,@PathVariable("fieldIndicator") final String fieldIndicator,
-                                                @PathVariable("criteria") final String criteria){
-        System.out.println("getJSONDataByCriteria:");
+    private JSONArray getDataByCriteria(String filePath, String trackName,String fieldIndicator,String criteria){
         JSONParser parser = new JSONParser();
         Object obj = null;
         String appName="";
@@ -117,7 +135,7 @@ public class DataController {
         System.out.println("criteria:"+criteria);
         System.out.println("fieldIndicator :"+fieldIndicator);
         try {
-            obj = parser.parse(new FileReader(jsonPath));
+            obj = parser.parse(new FileReader(filePath));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -129,33 +147,41 @@ public class DataController {
 
 
         while(itr.hasNext()){
+            StringTokenizer st = new StringTokenizer(criteria,"-");
+
             JSONObject featureJsonObj = (JSONObject)itr.next();
+            System.out.println("next iteration  RTC ID:"+featureJsonObj.get("RTC-ID").toString());
             // System.out.println("Status:"+featureJsonObj.get("Status"));
             if(featureJsonObj.get("Status")!=null && featureJsonObj.get("Status").toString().length()>0){
                 featureJsonObj.put("Status",featureJsonObj.get("Status").toString().substring(0,featureJsonObj.get("Status").toString().indexOf('(')-1));
                 //System.out.println("status::"+featureJsonObj.get("Status").toString().substring(0,featureJsonObj.get("Status").toString().indexOf('(')));
-               // System.out.println("status lenght::"+featureJsonObj.get("Status").toString().substring(0,featureJsonObj.get("Status").toString().indexOf('(')).length());
+                // System.out.println("status lenght::"+featureJsonObj.get("Status").toString().substring(0,featureJsonObj.get("Status").toString().indexOf('(')).length());
             }
             if(featureJsonObj.get("Defect Severity")!=null && featureJsonObj.get("Defect Severity").toString().length()>0){
                 featureJsonObj.put("Defect Severity",featureJsonObj.get("Defect Severity").toString().substring(0,featureJsonObj.get("Defect Severity").toString().indexOf(' ')));
 
             }
-
+            //Filtering the JSON data as per the criteria
             if(featureJsonObj.get("DES Track")!=null && featureJsonObj.get("DES Track").toString().equalsIgnoreCase(appName)){
                 featureJsonObj.put("DES Track",featureJsonObj.get("DES Track"));
                 System.out.println("Matching DES Track :"+featureJsonObj.get("DES Track"));
                 System.out.println(" fieldIndicator 1 length:"+featureJsonObj.get(fieldIndicator).toString().length());
-                System.out.println(" fieldIndicator 1:"+featureJsonObj.get(fieldIndicator).toString());
-                System.out.println("criteria 1 len:"+criteria.length());
-                System.out.println("criteria 1:"+criteria);
-                if(featureJsonObj.get(fieldIndicator)!=null && featureJsonObj.get(fieldIndicator).toString().equalsIgnoreCase(criteria)){
-                    System.out.println("Matching fieldIndicator:"+featureJsonObj.get(fieldIndicator));
-                    System.out.println("Matching criteria:"+criteria);
-                    jsonObjectCopy.add(featureJsonObj)  ;
+                // System.out.println(" fieldIndicator 1:"+featureJsonObj.get(fieldIndicator).toString());
+                //System.out.println(" RTC ID:"+featureJsonObj.get("RTC-ID").toString());
+                System.out.println("st.toString():"+st.toString());
+                while (st.hasMoreTokens()) {
+                    String innerCriteria=st.nextToken();
+                    //System.out.println("criteria 1 len:"+criteria.length());
+                    System.out.println("innerCriteria 1:"+innerCriteria);
+                    if(featureJsonObj.get(fieldIndicator)!=null && featureJsonObj.get(fieldIndicator).toString().equalsIgnoreCase(innerCriteria)){
+                        System.out.println("Matching fieldIndicator:"+featureJsonObj.get(fieldIndicator));
+                        System.out.println("Matching innerCriteria:"+innerCriteria);
+                        jsonObjectCopy.add(featureJsonObj)  ;
+                    }
                 }
             }
         }
-        return new ResponseEntity(jsonObjectCopy, HttpStatus.OK);
+        return jsonObjectCopy;
     }
 
     private String getApplicationTrackName(String trackName){
